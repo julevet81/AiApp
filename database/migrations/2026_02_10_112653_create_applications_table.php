@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('idea');
             $table->string('domain');
             $table->enum('status', ['waiting', 'created', 'uploaded', 'verified', 'rejected'])->default('waiting');
-            $table->text('notes')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

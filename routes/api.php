@@ -20,6 +20,9 @@ Route::post('/reset-password', [PasswordController::class, 'reset']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
 
-    ##################### Applications management routes #####################
-    Route::apiResource('applications', AppController::class);
+##################### Applications management routes #####################
+Route::apiResource('applications', AppController::class);
+
+
+
 });
