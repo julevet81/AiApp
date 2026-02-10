@@ -27,7 +27,7 @@ class AppController extends Controller
 
         $app = Application::create($validated);
 
-        return response()->json($app, 201);
+        return response()->json([$app, 'message' => 'Created successfully'], 201);
     }
 
     // عرض تطبيق واحد
@@ -48,7 +48,9 @@ class AppController extends Controller
         ]);
         $app->update($verified);
 
-        return response()->json($app);
+        return response()->json(
+            [$app, 'message' => 'Updated successfully']
+            );
     }
 
     // حذف التطبيق
