@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 ##################### Applications management routes #####################
 Route::apiResource('applications', AppController::class);
+
+###################### User management routes #####################
+Route::apiResource('users', UserController::class);
 
 
 
