@@ -5,31 +5,32 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
-use Illuminate\Support\Facades\Auth as SupportFacadesAuth;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    // عرض جميع المستخدمين
+    /**
+     * Display a listing of users (with roles).
+     */
     public function index()
     {
+        $users = User::with('roles', 'permissions')->get();
 
-        $users = User::all();
         return response()->json([
-            'message' => 'تم جلب جميع المستخدمين بنجاح',
-            'data' => $users
+            'message' => 'Users retrieved successfully',
+            'data' => $users,
         ], 200);
     }
 
-    // عرض مستخدم واحد
-    public function show($id)
+    /**
+     * Display the specified user (with roles and permissions).
+     */
+    public function show(User $user)
     {
-        $user = User::findOrFail($id);
+        $user->load('roles', 'permissions');
+
         return response()->json([
-            'message' => 'تم جلب بيانات المستخدم بنجاح',
-            'data' => $user
+            'message' => 'User retrieved successfully',
+            'data' => $user,
         ], 200);
     }
 
@@ -40,6 +41,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'nullable|string|exists:roles,name',
         ]);
 
         $user = User::create([
@@ -48,7 +50,9 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        $user->assignRole($request->role);
+        if ($request->filled('role')) {
+            $user->assignRole($request->role);
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -59,40 +63,68 @@ class UserController extends Controller
         ], 201);
     }
 
-    // تحديث بيانات المستخدم
-    public function update(Request $request, $id)
+    /**
+     * Update the specified user.
+     */
+    public function update(Request $request, User $user)
     {
-
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'roles' => 'nullable|array',
+            'roles.*' => 'string|exists:roles,name',
         ]);
 
-        $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
 
         if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
+            $user->password = $request->password;
         }
 
         $user->save();
 
+        if (array_key_exists('roles', $request->all())) {
+            $user->syncRoles($request->roles ?? []);
+        }
+
+        $user->load('roles', 'permissions');
+
         return response()->json([
-            'message' => 'تم تحديث المستخدم بنجاح',
-            'data' => $user
+            'message' => 'User updated successfully',
+            'data' => $user,
         ], 200);
     }
 
-    // حذف المستخدم
-    public function destroy($id)
+    /**
+     * Remove the specified user.
+     */
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
 
         return response()->json([
-            'message' => 'تم حذف المستخدم بنجاح'
+            'message' => 'User deleted successfully',
+        ], 200);
+    }
+
+    /**
+     * Sync roles for the specified user.
+     */
+    public function syncRoles(Request $request, User $user)
+    {
+        $request->validate([
+            'roles' => 'required|array',
+            'roles.*' => 'string|exists:roles,name',
+        ]);
+
+        $user->syncRoles($request->roles);
+        $user->load('roles', 'permissions');
+
+        return response()->json([
+            'message' => 'User roles updated successfully',
+            'data' => $user,
         ], 200);
     }
 }

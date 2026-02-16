@@ -17,6 +17,18 @@ return new class extends Migration
             $table->text('idea');
             $table->string('domain');
             $table->enum('status', ['waiting', 'created', 'uploaded', 'verified', 'rejected'])->default('waiting');
+            $table->string('site_url');
+            $table->string('privacy_url');
+            $table->string('delete_url');
+            $table->string('files_url');
+            $table->string('design_url');
+            $table->enum('site_status', ['waiting', 'created', 'uploaded', 'verified'])->default('waiting');
+            $table->enum('privacy_status', ['waiting', 'created', 'uploaded', 'verified'])->default('waiting');
+            $table->enum('delete_status', ['waiting', 'created', 'uploaded', 'verified'])->default('waiting');
+            $table->enum('files_status', ['waiting', 'created', 'uploaded', 'verified'])->default('waiting');
+            $table->string('chort_description')->nullable();
+            $table->text('long_description')->nullable();
+            $table->string('email_access')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

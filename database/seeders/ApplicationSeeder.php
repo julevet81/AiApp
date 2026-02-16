@@ -4,45 +4,113 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Application;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class ApplicationSeeder extends Seeder
 {
     public function run(): void
     {
-        $applications = [
+        $statuses = ['waiting', 'created', 'uploaded', 'verified'];
+
+        $apps = [
+
             [
-                'app_name' => 'Relief Management System',
-                'idea'     => 'Platform to manage relief aid and beneficiaries',
-                'domain'   => 'https://relief.example.com',
-                'status'   => 'waiting',
-                'note'     => 'Core system for NGO operations',
+                'app_name' => 'Volunteer Manager',
+                'idea' => 'System to manage volunteers and their activities',
+                'domain' => 'volunteer-manager.com',
             ],
+
             [
-                'app_name' => 'Volunteer Tracker',
-                'idea'     => 'Track volunteers participation and skills',
-                'domain'   => 'https://volunteers.example.com',
-                'status'   => 'created',
-                'note'     => null,
+                'app_name' => 'School System',
+                'idea' => 'Manage students, teachers and classes',
+                'domain' => 'school-system.com',
             ],
+
             [
-                'app_name' => 'Donation Portal',
-                'idea'     => 'Online donations and donor management',
-                'domain'   => 'https://donate.example.com',
-                'status'   => 'verified',
-                'note'     => 'Waiting for payment gateway integration',
+                'app_name' => 'Clinic Manager',
+                'idea' => 'Manage clinic appointments and patients',
+                'domain' => 'clinic-manager.com',
             ],
+
             [
-                'app_name' => 'Event Organizer',
-                'idea'     => 'Organize charity events and campaigns',
-                'domain'   => 'https://events.example.com',
-                'status'   => 'uploaded',
-                'note'     => 'Paused due to budget limitations',
+                'app_name' => 'Task Manager',
+                'idea' => 'Manage tasks and projects',
+                'domain' => 'task-manager.com',
             ],
+
+            [
+                'app_name' => 'Donation System',
+                'idea' => 'Manage donations and donors',
+                'domain' => 'donation-system.com',
+            ],
+
+            [
+                'app_name' => 'Inventory System',
+                'idea' => 'Manage products and inventory',
+                'domain' => 'inventory-system.com',
+            ],
+
+            [
+                'app_name' => 'Booking System',
+                'idea' => 'Online booking system',
+                'domain' => 'booking-system.com',
+            ],
+
+            [
+                'app_name' => 'HR System',
+                'idea' => 'Manage employees and HR operations',
+                'domain' => 'hr-system.com',
+            ],
+
+            [
+                'app_name' => 'E-commerce Platform',
+                'idea' => 'Online store platform',
+                'domain' => 'ecommerce-platform.com',
+            ],
+
+            [
+                'app_name' => 'Learning Platform',
+                'idea' => 'Online learning management system',
+                'domain' => 'learning-platform.com',
+            ],
+
         ];
 
-        foreach ($applications as $app) {
-            Application::create($app);
+        foreach ($apps as $index => $app) {
+
+            Application::create([
+
+                'app_name' => $app['app_name'],
+
+                'idea' => $app['idea'],
+
+                'domain' => $app['domain'],
+
+                'status' => $statuses[array_rand($statuses)],
+
+                'site_url' => 'https://' . $app['domain'],
+
+                'privacy_url' => 'https://' . $app['domain'] . '/privacy',
+
+                'delete_url' => 'https://' . $app['domain'] . '/delete-app',
+
+                'design_url' => 'https://figma.com/' . Str::random(10),
+
+                'site_status' => $statuses[array_rand($statuses)],
+
+                'privacy_status' => $statuses[array_rand($statuses)],
+
+                'delete_status' => $statuses[array_rand($statuses)],
+
+                'chort_description' => 'Short description for ' . $app['app_name'],
+
+                'long_description' => 'This is a long description for ' . $app['app_name'] . '. It explains all features and functionality.',
+
+                'email_access' => 'admin@' . $app['domain'],
+
+                'note' => 'Seeder generated record',
+
+            ]);
         }
     }
 }

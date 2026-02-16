@@ -7,11 +7,10 @@ use App\Models\Application;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
-use Exception;
+
 
 class AppController extends Controller
 {
-    // عرض كل التطبيقات
     public function index()
     {
         try {
@@ -21,7 +20,8 @@ class AppController extends Controller
                 'success' => true,
                 'data'    => $apps
             ], 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch applications',
@@ -30,16 +30,38 @@ class AppController extends Controller
         }
     }
 
-    // إضافة تطبيق جديد
+    /**
+     * إضافة تطبيق جديد
+     */
     public function store(Request $request)
     {
         try {
+
             $validated = $request->validate([
-                'app_name' => 'required|string|max:255',
-                'idea'     => 'required|string',
-                'domain'   => 'required|string',
-                'status'   => 'sometimes|required|in:waiting,created,uploaded,verified,rejected',
-                'note'     => 'nullable|string',
+
+                'app_name'           => 'required|string|max:255',
+                'idea'               => 'required|string',
+                'domain'             => 'required|string|max:255',
+
+                'status'             => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+
+                'site_url'           => 'required|string|max:255',
+                'privacy_url'        => 'required|string|max:255',
+                'delete_url'         => 'required|string|max:255',
+                'design_url'         => 'required|string|max:255',
+                'files_url'          => 'required|string|max:255',
+
+                'site_status'        => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+                'privacy_status'     => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+                'delete_status'      => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+                'files_status'      => 'sometimes|in:waiting,created,uploaded,verified',
+
+                'chort_description'  => 'nullable|string|max:255',
+                'long_description'   => 'nullable|string',
+
+                'email_access'       => 'nullable|email|max:255',
+
+                'note'               => 'nullable|string',
             ]);
 
             $app = Application::create($validated);
@@ -50,12 +72,14 @@ class AppController extends Controller
                 'data'    => $app
             ], 201);
         } catch (ValidationException $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Validation error',
                 'errors'  => $e->errors()
             ], 422);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create application',
@@ -64,10 +88,13 @@ class AppController extends Controller
         }
     }
 
-    // عرض تطبيق واحد
+    /**
+     * عرض تطبيق واحد
+     */
     public function show($id)
     {
         try {
+
             $app = Application::findOrFail($id);
 
             return response()->json([
@@ -75,11 +102,13 @@ class AppController extends Controller
                 'data'    => $app
             ], 200);
         } catch (ModelNotFoundException $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Application not found'
             ], 404);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch application',
@@ -88,18 +117,39 @@ class AppController extends Controller
         }
     }
 
-    // تحديث التطبيق
+    /**
+     * تحديث التطبيق
+     */
     public function update(Request $request, $id)
     {
         try {
+
             $app = Application::findOrFail($id);
 
             $validated = $request->validate([
-                'app_name' => 'sometimes|string|max:255',
-                'idea'     => 'sometimes|string',
-                'domain'   => 'sometimes|string',
-                'status'   => 'sometimes|required|in:waiting,created,uploaded,verified,rejected',
-                'note'     => 'nullable|string',
+
+                'app_name'           => 'sometimes|string|max:255',
+                'idea'               => 'sometimes|string',
+                'domain'             => 'sometimes|string|max:255',
+                'status'             => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+
+                'site_url'           => 'sometimes|string|max:255',
+                'privacy_url'        => 'sometimes|string|max:255',
+                'delete_url'         => 'sometimes|string|max:255',
+                'design_url'         => 'sometimes|string|max:255',
+                'files_url'          => 'sometimes|string|max:255',
+
+                'site_status'        => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+                'privacy_status'     => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+                'delete_status'      => 'sometimes|in:waiting,created,uploaded,verified,rejected',
+                'files_status'      => 'sometimes|in:waiting,created,uploaded,verified',
+
+                'chort_description'  => 'nullable|string|max:255',
+                'long_description'   => 'nullable|string',
+
+                'email_access'       => 'nullable|string|max:255',
+
+                'note'               => 'nullable|string',
             ]);
 
             $app->update($validated);
@@ -110,17 +160,20 @@ class AppController extends Controller
                 'data'    => $app
             ], 200);
         } catch (ValidationException $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Validation error',
                 'errors'  => $e->errors()
             ], 422);
         } catch (ModelNotFoundException $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Application not found'
             ], 404);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update application',
@@ -129,11 +182,15 @@ class AppController extends Controller
         }
     }
 
-    // حذف التطبيق
+    /**
+     * حذف التطبيق
+     */
     public function destroy($id)
     {
         try {
+
             $app = Application::findOrFail($id);
+
             $app->delete();
 
             return response()->json([
@@ -141,11 +198,13 @@ class AppController extends Controller
                 'message' => 'Application deleted successfully'
             ], 200);
         } catch (ModelNotFoundException $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Application not found'
             ], 404);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete application',

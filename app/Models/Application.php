@@ -13,6 +13,20 @@ class Application extends Model
         'idea',
         'domain',
         'status',
+        'site_url',
+        'privacy_url',
+        'delete_url',
+        'design_url',
+        'files_url',
+        'site_status',
+        'privacy_status',
+        'delete_status',
+        'files_status',
+        'chort_description',
+        'long_description',
+        'email_access',
         'notes',
     ];
+
+    
 }
