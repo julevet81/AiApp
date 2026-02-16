@@ -95,12 +95,15 @@ class ApplicationSeeder extends Seeder
                 'delete_url' => 'https://' . $app['domain'] . '/delete-app',
 
                 'design_url' => 'https://figma.com/' . Str::random(10),
+                'files_url' => 'https://' . $app['domain'] . '/files',
 
                 'site_status' => $statuses[array_rand($statuses)],
 
                 'privacy_status' => $statuses[array_rand($statuses)],
 
                 'delete_status' => $statuses[array_rand($statuses)],
+                
+                'files_status' => $statuses[array_rand($statuses)],
 
                 'chort_description' => 'Short description for ' . $app['app_name'],
 
