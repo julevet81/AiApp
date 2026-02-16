@@ -41,15 +41,15 @@ class AppController extends Controller
 
                 'app_name'           => 'required|string|max:255',
                 'idea'               => 'required|string',
-                'domain'             => 'required|string|max:255',
+                'domain'             => 'nullable|string|max:255',
 
                 'status'             => 'sometimes|in:waiting,created,uploaded,verified,rejected',
 
-                'site_url'           => 'required|string|max:255',
-                'privacy_url'        => 'required|string|max:255',
-                'delete_url'         => 'required|string|max:255',
-                'design_url'         => 'required|string|max:255',
-                'files_url'          => 'required|string|max:255',
+                'site_url'           => 'nullable|string|max:255',
+                'privacy_url'        => 'nullable|string|max:255',
+                'delete_url'         => 'nullable|string|max:255',
+                'design_url'         => 'nullable|string|max:255',
+                'files_url'          => 'nullable|string|max:255',
 
                 'site_status'        => 'sometimes|in:waiting,created,uploaded,verified,rejected',
                 'privacy_status'     => 'sometimes|in:waiting,created,uploaded,verified,rejected',
