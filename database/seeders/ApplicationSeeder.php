@@ -102,7 +102,7 @@ class ApplicationSeeder extends Seeder
                 'privacy_status' => $statuses[array_rand($statuses)],
 
                 'delete_status' => $statuses[array_rand($statuses)],
-                
+
                 'files_status' => $statuses[array_rand($statuses)],
 
                 'chort_description' => 'Short description for ' . $app['app_name'],
@@ -110,6 +110,7 @@ class ApplicationSeeder extends Seeder
                 'long_description' => 'This is a long description for ' . $app['app_name'] . '. It explains all features and functionality.',
 
                 'email_access' => 'admin@' . $app['domain'],
+                'ksa_instructions' => 'Instructions for KSA for ' . $app['app_name'],
 
                 'note' => 'Seeder generated record',
 
