@@ -25,7 +25,6 @@ class Application extends Model
         'chort_description',
         'long_description',
         'email_access',
-        'ksa_instructions',
         'notes',
     ];
 

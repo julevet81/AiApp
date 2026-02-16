@@ -29,7 +29,6 @@ return new class extends Migration
             $table->string('chort_description')->nullable();
             $table->text('long_description')->nullable();
             $table->string('email_access')->nullable();
-            $table->text('ksa_instructions')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

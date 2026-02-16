@@ -60,7 +60,6 @@ class AppController extends Controller
                 'long_description'   => 'nullable|string',
 
                 'email_access'       => 'nullable|email|max:255',
-                'ksa_instructions'   => 'nullable|string',
 
                 'note'               => 'nullable|string',
             ]);
@@ -149,7 +148,6 @@ class AppController extends Controller
                 'long_description'   => 'nullable|string',
 
                 'email_access'       => 'nullable|string|max:255',
-                'ksa_instructions'   => 'nullable|string',
 
                 'note'               => 'nullable|string',
             ]);
