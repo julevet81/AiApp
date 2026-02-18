@@ -9,9 +9,6 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of roles.
-     */
     public function index(): JsonResponse
     {
         $roles = Role::with('permissions')->get();
@@ -22,9 +19,6 @@ class RoleController extends Controller
         ], 200);
     }
 
-    /**
-     * Store a newly created role.
-     */
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -47,9 +41,6 @@ class RoleController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified role.
-     */
     public function show(Role $role): JsonResponse
     {
         $role->load('permissions');
@@ -60,9 +51,6 @@ class RoleController extends Controller
         ], 200);
     }
 
-    /**
-     * Update the specified role.
-     */
     public function update(Request $request, Role $role): JsonResponse
     {
         $request->validate([
@@ -87,9 +75,6 @@ class RoleController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified role.
-     */
     public function destroy(Role $role): JsonResponse
     {
         $role->delete();

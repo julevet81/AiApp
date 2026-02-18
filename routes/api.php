@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AppController;
+use App\Http\Controllers\Api\ApplicationBulkStatusController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordController;
 use App\Http\Controllers\Api\Auth\RegisterController;
@@ -29,6 +31,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('applications/{application}', [AppController::class, 'show'])->middleware('permission:applications.view');
     Route::put('applications/{application}', [AppController::class, 'update'])->middleware('permission:applications.update');
     Route::delete('applications/{application}', [AppController::class, 'destroy'])->middleware('permission:applications.delete');
+    Route::patch('applications/bulk-status', [ApplicationBulkStatusController::class, 'update_status'])->middleware('permission:applications.update');
+    Route::patch('applications/bulk-site-status', [ApplicationBulkStatusController::class, 'update_site_status'])->middleware('permission:applications.update');
+    Route::patch('applications/bulk-privacy-status', [ApplicationBulkStatusController::class, 'update_privacy_status'])->middleware('permission:applications.update');
+    Route::patch('applications/bulk-delete-status', [ApplicationBulkStatusController::class, 'update_delete_status'])->middleware('permission:applications.update');
+    Route::delete('applications/bulk-delete', [ApplicationBulkStatusController::class, 'delete'])->middleware('permission:applications.delete');
 
     ###################### User management routes #####################
     Route::get('users', [UserController::class, 'index'])->middleware('permission:users.view');
@@ -38,6 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('users/{user}', [UserController::class, 'update'])->middleware('permission:users.update');
     Route::put('users/{user}/roles', [UserController::class, 'syncRoles'])->middleware('permission:users.update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->middleware('permission:users.delete');
+
 
     #################### Roles & Permissions management routes #####################
     Route::get('roles', [RoleController::class, 'index'])->middleware('permission:roles.view');
@@ -51,4 +59,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('permissions/{permission}', [PermissionController::class, 'show'])->middleware('permission:permissions.view');
     Route::put('permissions/{permission}', [PermissionController::class, 'update'])->middleware('permission:permissions.update');
     Route::delete('permissions/{permission}', [PermissionController::class, 'destroy'])->middleware('permission:permissions.delete');
+
+    ######################## Accounts management routes ########################
+    Route::get('accounts', [AccountController::class, 'index'])->middleware('permission:accounts.view');
+    Route::post('accounts', [AccountController::class, 'store'])->middleware('permission:accounts.create');
+    Route::get('accounts/{account}', [AccountController::class, 'show'])->middleware('permission:accounts.view');
+    Route::put('accounts/{account}', [AccountController::class, 'update'])->middleware('permission:accounts.update');
+    Route::delete('accounts/{account}', [AccountController::class, 'destroy'])->middleware('permission:accounts.delete');
+    Route::get('accounts/{account}/history', [AccountController::class, 'history'])->middleware('permission:accounts.view');
+    Route::post('accounts/import', [AccountController::class, 'import']);
 });

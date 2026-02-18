@@ -8,11 +8,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportApplicationsFromExcel extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'applications:import
                             {file : Path to the Excel file (.xlsx, .xls, or .csv)}
                             {--replace : Truncate applications table before import (replaces all data)}';

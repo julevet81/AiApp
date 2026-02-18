@@ -30,9 +30,6 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * إضافة تطبيق جديد
-     */
     public function store(Request $request)
     {
         try {
@@ -88,9 +85,6 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * عرض تطبيق واحد
-     */
     public function show($id)
     {
         try {
@@ -117,9 +111,6 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * تحديث التطبيق
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -142,7 +133,7 @@ class AppController extends Controller
                 'site_status'        => 'sometimes|in:waiting,created,uploaded,verified,rejected',
                 'privacy_status'     => 'sometimes|in:waiting,created,uploaded,verified,rejected',
                 'delete_status'      => 'sometimes|in:waiting,created,uploaded,verified,rejected',
-                'files_status'      => 'sometimes|in:waiting,created,uploaded,verified',
+                'files_status'       => 'sometimes|in:waiting,created,uploaded,verified',
 
                 'chort_description'  => 'nullable|string|max:255',
                 'long_description'   => 'nullable|string',
@@ -152,12 +143,18 @@ class AppController extends Controller
                 'note'               => 'nullable|string',
             ]);
 
+            if (isset($validated['status']) && in_array($validated['status'], ['verified', 'uploaded'])) {
+                $validated['site_status'] = 'uploaded';
+                $validated['privacy_status'] = 'uploaded';
+                $validated['delete_status'] = 'uploaded';
+            }
+
             $app->update($validated);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Application updated successfully',
-                'data'    => $app
+                'data'    => $app->fresh()
             ], 200);
         } catch (ValidationException $e) {
 
@@ -182,9 +179,7 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * حذف التطبيق
-     */
+
     public function destroy($id)
     {
         try {
