@@ -21,9 +21,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * Display the specified user (with roles and permissions).
-     */
     public function show(User $user)
     {
         $user->load('roles', 'permissions');
@@ -41,6 +38,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'status' => 'nullable|in:active,inactive',
             'role' => 'nullable|string|exists:roles,name',
         ]);
 
@@ -72,6 +70,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'status' => 'nullable|in:active,inactive',
             'roles' => 'nullable|array',
             'roles.*' => 'string|exists:roles,name',
         ]);
@@ -97,9 +96,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified user.
-     */
     public function destroy(User $user)
     {
         $user->delete();
