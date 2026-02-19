@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AccountsImport;
+use App\Models\Application;
+use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
@@ -20,23 +22,81 @@ class AccountController extends Controller
         );
     }
 
+    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
 
+            // بيانات الحساب
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|unique:accounts',
-            'email' => 'required|email|unique:accounts',
-            'application_id' => 'required|exists:applications,id',
+            'phone' => 'required|string|unique:accounts,phone',
+            'email' => 'required|email|unique:accounts,email',
             'status' => 'nullable|in:opened,registered,confirmed,transferred',
-            'transfer_price' => 'nullable|numeric'
+            'transfer_price' => 'nullable|numeric',
+
+            // خيار 1: استخدام تطبيق موجود
+            'application_id' => 'nullable|exists:applications,id',
+
+            // خيار 2: إنشاء تطبيق جديد
+            'application.app_name' => 'nullable|required_without:application_id|string|max:255',
+            'application.idea' => 'nullable|required_without:application_id|string',
+            'application.domain' => 'nullable|string|max:255',
 
         ]);
 
-        $account = Account::create($validated);
+        DB::beginTransaction();
 
-        return response()->json($account, 201);
+        try {
+
+            // إذا تم إرسال application_id استخدمه
+            if (!empty($validated['application_id'])) {
+
+                $applicationId = $validated['application_id'];
+            }
+            // إذا تم إرسال بيانات تطبيق جديد
+            elseif (!empty($validated['application'])) {
+
+                $application = Application::create([
+                    'app_name' => $validated['application']['app_name'],
+                    'idea' => $validated['application']['idea'],
+                    'domain' => $validated['application']['domain'] ?? null,
+                ]);
+
+                $applicationId = $application->id;
+            } else {
+                return response()->json([
+                    'message' => 'application_id or application data is required'
+                ], 422);
+            }
+
+            // إنشاء الحساب
+            $account = Account::create([
+                'name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'email' => $validated['email'],
+                'application_id' => $applicationId,
+                'status' => $validated['status'] ?? 'opened',
+                'transfer_price' => $validated['transfer_price'] ?? null,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Account created successfully',
+                'data' => $account->load('application')
+            ], 201);
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Creation failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function show($id)
     {
