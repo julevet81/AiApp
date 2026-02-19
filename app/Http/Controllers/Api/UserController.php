@@ -61,9 +61,6 @@ class UserController extends Controller
         ], 201);
     }
 
-    /**
-     * Update the specified user.
-     */
     public function update(Request $request, User $user)
     {
         $request->validate([
@@ -78,12 +75,19 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
 
+        // إضافة تحديث الحالة
+        if ($request->has('status')) {
+            $user->status = $request->status;
+        }
+
+        // تحديث كلمة المرور إذا تم إرسالها
         if ($request->filled('password')) {
-            $user->password = $request->password;
+            $user->password = bcrypt($request->password);
         }
 
         $user->save();
 
+        // تحديث الأدوار إذا تم إرسالها
         if (array_key_exists('roles', $request->all())) {
             $user->syncRoles($request->roles ?? []);
         }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\ApplicationBulkStatusController;
+use App\Http\Controllers\Api\ApplicationImportController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordController;
 use App\Http\Controllers\Api\Auth\RegisterController;
@@ -36,6 +37,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('applications/bulk-privacy-status', [ApplicationBulkStatusController::class, 'update_privacy_status'])->middleware('permission:applications.update');
     Route::patch('applications/bulk-delete-status', [ApplicationBulkStatusController::class, 'update_delete_status'])->middleware('permission:applications.update');
     Route::delete('applications/bulk-delete', [ApplicationBulkStatusController::class, 'delete'])->middleware('permission:applications.delete');
+    Route::post('/applications/import', [ApplicationImportController::class, 'import']);
+
 
     ###################### User management routes #####################
     Route::get('users', [UserController::class, 'index'])->middleware('permission:users.view');
