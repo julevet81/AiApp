@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApplicationBulkStatusController;
 use App\Http\Controllers\Api\ApplicationImportController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordController;
+use App\Http\Controllers\Api\Auth\ProfileController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -25,6 +26,7 @@ Route::post('/reset-password', [PasswordController::class, 'reset']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
+    Route::put('/profile/update/{profile}', [ProfileController::class, 'updateProfile']);
 
     ##################### Applications management routes #####################
     Route::get('applications', [AppController::class, 'index'])->middleware('permission:applications.view');
@@ -70,5 +72,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('accounts/{account}', [AccountController::class, 'update'])->middleware('permission:accounts.update');
     Route::delete('accounts/{account}', [AccountController::class, 'destroy'])->middleware('permission:accounts.delete');
     Route::get('accounts/{account}/history', [AccountController::class, 'history'])->middleware('permission:accounts.view');
-    Route::post('accounts/import', [AccountController::class, 'import']);
+    Route::post('accounts/import', [AccountController::class, 'import'])->middleware('permission:accounts.view');
 });

@@ -21,9 +21,7 @@ class AccountController extends Controller
             Account::with('application')->latest()->paginate(10)
         );
     }
-
     
-
     public function store(Request $request)
     {
         $validated = $request->validate([

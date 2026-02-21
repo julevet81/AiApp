@@ -3,23 +3,35 @@
 namespace App\Imports;
 
 use App\Models\Account;
+use App\Models\Application;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Facades\DB;
 
 class AccountsImport implements ToModel, WithHeadingRow, WithValidation
 {
     public function model(array $row)
     {
-        return new Account([
-            'name' => $row['name'],
-            'phone' => $row['phone'],
-            'email' => $row['email'],
-            'application_id' => $row['application_id'],
-            'status' => $row['status'] ?? 'opened',
-            'transfer_price' => $row['transfer_price'] ?? null,
-        ]);
+        return DB::transaction(function () use ($row) {
+
+            // 1️⃣ إنشاء التطبيق أولاً
+            $application = Application::create([
+                'app_name' => $row['app_name'],
+                'idea' => $row['idea'],
+                'domain' => $row['domain'] ?? null,
+            ]);
+
+            // 2️⃣ إنشاء الحساب وربطه بالتطبيق
+            return new Account([
+                'name' => $row['name'],
+                'phone' => $row['phone'],
+                'email' => $row['email'],
+                'application_id' => $application->id,
+                'status' => $row['status'] ?? 'opened',
+            ]);
+        });
     }
 
     public function rules(): array
@@ -28,12 +40,17 @@ class AccountsImport implements ToModel, WithHeadingRow, WithValidation
             '*.name' => 'required|string',
             '*.phone' => 'required|unique:accounts,phone',
             '*.email' => 'required|email|unique:accounts,email',
-            '*.application_id' => 'required|exists:applications,id',
+
+            // بيانات التطبيق (إجبارية)
+            '*.app_name' => 'required|string',
+            '*.idea' => 'required|string',
+            '*.domain' => 'nullable|string',
+
             '*.status' => [
                 'nullable',
                 Rule::in(['opened', 'registered', 'confirmed', 'transferred'])
             ],
-            '*.transfer_price' => 'nullable|numeric'
+
         ];
     }
 }
