@@ -34,6 +34,20 @@ class AccountsImport implements ToModel, WithHeadingRow, WithValidation
         });
     }
 
+    protected function nullable(mixed $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        return (string) $value;
+    }
+
+    protected function normalizeEnum(?string $value, array $allowed): string
+    {
+        $value = $value ? strtolower(trim((string) $value)) : 'opened';
+        return in_array($value, $allowed, true) ? $value : $allowed[0];
+    }
+
     public function rules(): array
     {
         return [

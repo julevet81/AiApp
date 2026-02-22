@@ -11,10 +11,11 @@ use Illuminate\Validation\ValidationException;
 
 class ApplicationBulkStatusController extends Controller
 {
-    
+
     public function update_status(Request $request)
     {
         $mainStatus = ['waiting', 'created', 'uploaded', 'verified', 'rejected'];
+        // $subStatus  = ['waiting', 'created', 'uploaded', 'verified', 'rejected'];
 
         try {
             $validated = $request->validate([
@@ -22,9 +23,6 @@ class ApplicationBulkStatusController extends Controller
                 'ids.*' => ['integer', 'distinct', 'exists:applications,id'],
 
                 'status' => ['sometimes', 'string', Rule::in($mainStatus)],
-                // 'site_status' => ['sometimes', 'string', Rule::in($subStatus)],
-                // 'privacy_status' => ['sometimes', 'string', Rule::in($subStatus)],
-                // 'delete_status' => ['sometimes', 'string', Rule::in($subStatus)],
             ]);
 
             $updateData = collect($validated)
@@ -33,8 +31,19 @@ class ApplicationBulkStatusController extends Controller
 
             if (count($updateData) === 0) {
                 throw ValidationException::withMessages([
-                    'status' => ['Provide at least one field to update: status, site_status, privacy_status, delete_status.'],
+                    'status' => ['Provide at least one field to update.'],
                 ]);
+            }
+
+            // ✅ المنطق المطلوب
+            if (
+                isset($updateData['status']) &&
+                in_array($updateData['status'], ['verified', 'uploaded'])
+            ) {
+
+                $updateData['site_status']    = 'uploaded';
+                $updateData['privacy_status'] = 'uploaded';
+                $updateData['delete_status']  = 'uploaded';
             }
 
             $ids = $validated['ids'];

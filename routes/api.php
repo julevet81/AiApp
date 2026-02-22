@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\AccountImportController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\ApplicationBulkStatusController;
 use App\Http\Controllers\Api\ApplicationImportController;
@@ -72,5 +73,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('accounts/{account}', [AccountController::class, 'update'])->middleware('permission:accounts.update');
     Route::delete('accounts/{account}', [AccountController::class, 'destroy'])->middleware('permission:accounts.delete');
     Route::get('accounts/{account}/history', [AccountController::class, 'history'])->middleware('permission:accounts.view');
-    Route::post('accounts/import', [AccountController::class, 'import'])->middleware('permission:accounts.view');
+    Route::post('accounts/import', [AccountImportController::class, 'import'])->middleware('permission:accounts.view');
 });
