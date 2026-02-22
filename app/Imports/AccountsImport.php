@@ -52,8 +52,8 @@ class AccountsImport implements ToModel, WithHeadingRow, WithValidation
     {
         return [
             '*.name' => 'required|string',
-            '*.phone' => 'required|unique:accounts,phone',
-            '*.email' => 'required|email|unique:accounts,email',
+            '*.phone' => 'nullable',
+            '*.email' => 'nullable|email',
 
             // بيانات التطبيق (إجبارية)
             '*.app_name' => 'required|string',

@@ -28,8 +28,8 @@ class AccountController extends Controller
 
             // بيانات الحساب
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|unique:accounts,phone',
-            'email' => 'required|email|unique:accounts,email',
+            'phone' => 'nullable|string',
+            'email' => 'nullable|email',
             'status' => 'nullable|in:opened,registered,confirmed,transferred',
             'transfer_price' => 'nullable|numeric',
 

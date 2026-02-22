@@ -6,26 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('phone')->unique();
-            $table->string('email')->unique();
-            $table->foreignId('application_id')->constrained()->cascadeOnDelete();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->foreignId('application_id')->constrained('applications', 'id')->nullOnDelete();
             $table->enum('status', ['opened', 'registered', 'confirmed', 'transferred'])->default('opened');
             $table->decimal('transfer_price', 10, 2)->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('accounts');
