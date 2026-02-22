@@ -109,9 +109,9 @@ class AccountController extends Controller
 
         $validated = $request->validate([
 
-            'name' => 'sometimes|string|max:255',
-            'phone' => "sometimes|string|unique:accounts,phone,$id",
-            'email' => "sometimes|email|unique:accounts,email,$id",
+            'name' => 'sometimes|string|max:255|unique:accounts,name,',
+            'phone' => "nullable|string",
+            'email' => "nullable|email",
             'status' => 'sometimes|in:opened,registered,confirmed,transferred',
             'transfer_price' => 'nullable|numeric'
 
