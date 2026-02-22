@@ -51,12 +51,12 @@ class AccountsImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            '*.name' => 'required|string',
-            '*.phone' => 'nullable',
+            '*.name' => 'required|string|unique:accounts,name',
+            '*.phone' => 'nullable|string',
             '*.email' => 'nullable|email',
 
             // بيانات التطبيق (إجبارية)
-            '*.app_name' => 'required|string',
+            '*.app_name' => 'required|string|unique:applications,app_name',
             '*.idea' => 'required|string',
             '*.domain' => 'nullable|string',
 

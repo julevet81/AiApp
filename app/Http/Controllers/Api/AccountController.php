@@ -27,7 +27,7 @@ class AccountController extends Controller
         $validated = $request->validate([
 
             // بيانات الحساب
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:accounts,name',
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
             'status' => 'nullable|in:opened,registered,confirmed,transferred',

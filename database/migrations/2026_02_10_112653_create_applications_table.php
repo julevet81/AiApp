@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->string('app_name');
+            $table->string('app_name')->unique();
             $table->text('idea');
             $table->string('domain')->nullable();
             $table->enum('status', ['waiting', 'created', 'uploaded', 'verified', 'rejected'])->default('waiting');

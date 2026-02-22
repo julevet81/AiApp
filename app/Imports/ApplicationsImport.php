@@ -57,8 +57,8 @@ class ApplicationsImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            // 'app_name' => ['string', 'max:255'],
-            // 'idea' => ['nullable', 'string'],
+            //'*.app_name' => ['required', 'string', 'unique:applications,app_name'],
+            //'*.idea' => ['nullable', 'string'],
         ];
     }
 
