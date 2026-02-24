@@ -119,7 +119,7 @@ class AppController extends Controller
 
             $validated = $request->validate([
 
-                'app_name'           => 'sometimes|string|max:255|unique:applications,app_name',
+                'app_name'           => 'sometimes|string|max:255',
                 'idea'               => 'sometimes|string',
                 'domain'             => 'sometimes|string|max:255',
                 'status'             => 'sometimes|in:waiting,created,uploaded,verified,rejected',

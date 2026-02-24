@@ -18,7 +18,7 @@ class AccountController extends Controller
     public function index()
     {
         return response()->json(
-            Account::with('application')->latest()->paginate(10)
+            Account::with('application')->latest()->paginate(50)
         );
     }
     
@@ -27,7 +27,7 @@ class AccountController extends Controller
         $validated = $request->validate([
 
             // بيانات الحساب
-            'name' => 'required|string|max:255|unique:accounts,name',
+            'name' => 'required|string|max:255',
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
             'status' => 'nullable|in:opened,registered,confirmed,transferred',
@@ -109,7 +109,7 @@ class AccountController extends Controller
 
         $validated = $request->validate([
 
-            'name' => 'sometimes|string|max:255|unique:accounts,name,',
+            'name' => 'sometimes|string|max:255',
             'phone' => "nullable|string",
             'email' => "nullable|email",
             'status' => 'sometimes|in:opened,registered,confirmed,transferred',
