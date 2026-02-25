@@ -30,7 +30,7 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
-            'status' => 'nullable|in:opened,registered,confirmed,transferred',
+            'status' => 'nullable|in:opened,registered,confirmed,transferred,paid,closed',
             'transfer_price' => 'nullable|numeric',
 
             // خيار 1: استخدام تطبيق موجود
@@ -112,7 +112,7 @@ class AccountController extends Controller
             'name' => 'sometimes|string|max:255',
             'phone' => "nullable|string",
             'email' => "nullable|email",
-            'status' => 'sometimes|in:opened,registered,confirmed,transferred',
+            'status' => 'sometimes|in:opened,registered,confirmed,transferred,paid,closed',
             'transfer_price' => 'nullable|numeric'
 
         ]);

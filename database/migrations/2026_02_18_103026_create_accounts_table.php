@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->foreignId('application_id')->nullable()->constrained()->nullOnDelete();
-            $table->enum('status', ['opened', 'registered', 'confirmed', 'transferred'])->default('opened');
+            $table->enum('status', ['opened', 'registered', 'confirmed', 'transferred', 'paid', 'closed'])->default('opened');
             $table->decimal('transfer_price', 10, 2)->nullable();
             $table->timestamps();
         });

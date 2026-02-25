@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApplicationImportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,11 +18,7 @@ Route::get('/clear-cache', function () {
     return 'Cache cleared';
 });
 
-Route::get('/applications/import', [ApplicationImportController::class, 'create'])
-    ->name('applications.import.create');
 
-Route::post('/applications/import', [ApplicationImportController::class, 'store'])
-    ->name('applications.import.store');
 
 Route::get('/applications/import/template', function () {
     $path = storage_path('app/applications_import_template.csv');
